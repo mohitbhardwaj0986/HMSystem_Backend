@@ -18,10 +18,7 @@ const medicalRecordSchema = new mongoose.Schema(
       ref: "Appointment",
       required: true,
     },
-    prescription: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Prescription",
-    },
+  
     symptoms: {
       type: String,
       required: [true, "Symptoms are required"],
