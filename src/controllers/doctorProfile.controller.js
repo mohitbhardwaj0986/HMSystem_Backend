@@ -114,6 +114,17 @@ const getAllDoctorProfiles = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, profiles, "All doctor profiles fetched"));
 });
+const getsingledoctor = asyncHandler(async (req, res) => {
+  const {id:doctorId} = req.params;
+
+  
+  const doctorProfile = await DoctorProfile.findOne({ _id: doctorId });
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, doctorProfile, "doctor profile fetched successfully")
+    );
+});
 
 export {
   createDoctorProfile,
@@ -121,4 +132,5 @@ export {
   updateDoctorProfile,
   deleteDoctorProfile,
   getAllDoctorProfiles,
+  getsingledoctor,
 };
