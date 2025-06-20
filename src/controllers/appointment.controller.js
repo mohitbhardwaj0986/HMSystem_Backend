@@ -17,6 +17,9 @@ const createAppointment = asyncHandler(async (req, res) => {
   const {id:doctorId} = req.params;
 
   // Check if doctor exists
+  console.log(doctorId);
+  console.log("challa");
+  
   const doctorExists = await DoctorProfile.findOne({_id:doctorId});
   if (!doctorExists) {
     throw new ApiError(404, "Doctor not found");
