@@ -106,7 +106,14 @@ const deletePrescription = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can delete prescriptions");
   }
+   const existingPrescription = await Prescription.findOne({_id:id});
+   const appointmentId = existingPrescription.appointment
+   
+const appointment = await Appointment.findOne({_id:appointmentId})
 
+   appointment.status = "pending"
+
+   await appointment.save()
   const deleted = await Prescription.findByIdAndDelete(id);
   if (!deleted) {
     throw new ApiError(404, "Prescription not found");

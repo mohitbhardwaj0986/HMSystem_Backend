@@ -1,5 +1,5 @@
 import Bill from "../models/bill.model.js";
-import Appointment from "../models/appointment.model.js"
+import Appointment from "../models/appointment.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -20,7 +20,8 @@ const createBill = asyncHandler(async (req, res) => {
   if (!appointment) {
     throw new ApiError(404, "Appointment not found");
   }
-
+appointment.isPaid = true;
+appointment.save()
   // Check if bill already exists for this appointment
   const existingBill = await Bill.findOne({ appointment: appointmentId });
   if (existingBill) {
@@ -37,7 +38,7 @@ const createBill = asyncHandler(async (req, res) => {
     totalAmount,
     paymentMethod,
     isPaid: true,
-    paidAt:  new Date(),
+    paidAt: new Date(),
     notes,
   });
 
@@ -46,21 +47,6 @@ const createBill = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, bill, "Bill created successfully"));
 });
 
-// Admin: Update Bill
-const updateBill = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  const bill = await Bill.findById(id);
-  if (!bill) {
-    throw new ApiError(404, "Bill not found");
-  }
-
-  const updatedFields = req.body;
-  Object.assign(bill, updatedFields);
-  await bill.save();
-
-  res.status(200).json(new ApiResponse(200, bill, "Bill updated successfully"));
-});
 
 // Admin: Delete Bill
 const deleteBill = asyncHandler(async (req, res) => {
@@ -95,4 +81,4 @@ const getMyBills = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, bills, "Your bills fetched"));
 });
 
-export { createBill, updateBill, getMyBills, getAllBills, deleteBill };
+export { createBill, getMyBills, getAllBills, deleteBill };

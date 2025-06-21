@@ -1,7 +1,6 @@
 import express from "express";
 import {
   createBill,
-  updateBill,
   deleteBill,
   getAllBills,
   getMyBills,
@@ -12,7 +11,6 @@ const router = express.Router();
 
 // Admin routes
 router.route("/create/:appointmentId").post(verifyJWT, createBill);
-router.route("/update/:id").patch(verifyJWT, updateBill);
 router.route("/delete/:id").delete(verifyJWT, deleteBill);
 router.route("/all").get(verifyJWT, getAllBills);
 
