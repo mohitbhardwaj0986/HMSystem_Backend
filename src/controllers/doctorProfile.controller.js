@@ -64,27 +64,7 @@ const getMyDoctorProfile = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, profile, "Doctor profile fetched successfully"));
 });
 
-// @desc    Update doctor profile
-// @route   PUT /api/v1/doctor-profile
-const updateDoctorProfile = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
 
-  const updatedFields = req.body;
-
-  const profile = await DoctorProfile.findOneAndUpdate(
-    { user: userId },
-    updatedFields,
-    { new: true, runValidators: true }
-  );
-
-  if (!profile) {
-    throw new ApiError(404, "Doctor profile not found");
-  }
-
-  res
-    .status(200)
-    .json(new ApiResponse(200, profile, "Doctor profile updated successfully"));
-});
 
 // @desc    Delete doctor profile
 // @route   DELETE /api/v1/doctor-profile
@@ -118,7 +98,7 @@ const getsingledoctor = asyncHandler(async (req, res) => {
   const {id:doctorId} = req.params;
 
   
-  const doctorProfile = await DoctorProfile.findOne({ _id: doctorId });
+  const doctorProfile = await DoctorProfile.findOne({ _id: doctorId }).populate("user", "-password -refreshToken");
   res
     .status(200)
     .json(
@@ -129,7 +109,6 @@ const getsingledoctor = asyncHandler(async (req, res) => {
 export {
   createDoctorProfile,
   getMyDoctorProfile,
-  updateDoctorProfile,
   deleteDoctorProfile,
   getAllDoctorProfiles,
   getsingledoctor,
